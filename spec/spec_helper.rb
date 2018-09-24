@@ -6,7 +6,7 @@ require './app'
 require 'simplecov'
 require 'simplecov-console'
 
-# Capybara.app =
+Capybara.app = BookmarkManager
 
 
 
