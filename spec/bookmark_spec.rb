@@ -15,4 +15,12 @@ describe Bookmark do
     end
   end
 
+  context ".create" do
+    it "should add a new bookmark to database" do
+      Bookmark.create("www.imgur.com")
+
+      expect(Bookmark.all).to include "www.imgur.com"
+    end
+  end
+
 end
