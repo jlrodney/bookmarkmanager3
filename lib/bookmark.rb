@@ -1,3 +1,5 @@
+require 'pg'
+
 class Bookmark
 
   BOOKMARKS = [
@@ -7,6 +9,16 @@ class Bookmark
      ]
 
   def self.all
-    BOOKMARKS
+    # BOOKMARKS
+
+    bookmarks = []
+    con = PG.connect :dbname => 'bookmark_manager'
+
+    table = con.exec "SELECT * FROM bookmarks"
+
+    table.each do |row|
+      bookmarks << "%s" % [ row['url'] ]
+    end
+    bookmarks
   end
 end
