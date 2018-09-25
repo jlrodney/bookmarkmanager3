@@ -9,16 +9,16 @@ class Bookmark
      ]
 
   def self.all
-    # BOOKMARKS
-
-    bookmarks = []
-    con = PG.connect :dbname => 'bookmark_manager'
+    if ENV['ENVIRONMENT'] = 'test'
+      con = PG.connect dbname: 'bookmark_manager_test'
+    else
+      con = PG.connect dbname: 'bookmark_manager'
+    end
 
     table = con.exec "SELECT * FROM bookmarks"
 
-    table.each do |row|
-      bookmarks << "%s" % [ row['url'] ]
+    table.map do |row|
+      row['url']
     end
-    bookmarks
   end
 end
