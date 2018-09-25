@@ -8,6 +8,6 @@ feature 'add bookmark' do
     visit('/add_bookmarks')
     fill_in :bookmark, with: 'www.imgur.com'
     click_button 'Add!'
-    expect(page).to have_content('www.ingur.com')
-  end 
+    expect(page).to have_content('www.imgur.com')
+  end
 end
