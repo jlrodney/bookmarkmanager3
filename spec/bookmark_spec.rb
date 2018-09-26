@@ -57,6 +57,6 @@ describe Bookmark do
         expect(Bookmark.valid?('hello')).to be false
       end
     end
-
+  end
 
 end

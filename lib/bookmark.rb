@@ -4,13 +4,7 @@ require 'uri'
 class Bookmark
 
   def self.all
-    if ENV['ENVIRONMENT'] = 'test'
-      con = PG.connect dbname: 'bookmark_manager_test'
-    else
-      con = PG.connect dbname: 'bookmark_manager'
-    end
-
-    table = con.exec "SELECT * FROM bookmarks"
+    table = connect.exec "SELECT * FROM bookmarks"
 
     table.map do |row|
       row['url']
@@ -18,26 +12,13 @@ class Bookmark
   end
 
   def self.create(url)
-
-    if ENV['ENVIRONMENT'] = 'test'
-      con = PG.connect dbname: 'bookmark_manager_test'
-    else
-      con = PG.connect dbname: 'bookmark_manager'
-    end
-
     string = "INSERT INTO bookmarks (url) VALUES ('" + url + "');"
-    con.exec(string)
+    connect.exec(string)
   end
 
   def self.delete(url)
-    if ENV['ENVIRONMENT'] = 'test'
-      con = PG.connect dbname: 'bookmark_manager_test'
-    else
-      con = PG.connect dbname: 'bookmark_manager'
-    end
-
     string = "DELETE FROM bookmarks WHERE url = '" + url + "';"
-    con.exec(string)
+    connect.exec(string)
   end
 
   def self.valid?(url)
@@ -49,5 +30,11 @@ class Bookmark
     false
   end
 
+  def self.connect
+    if ENV['ENVIRONMENT'] = 'test'
+      return PG.connect dbname: 'bookmark_manager_test'
+    end
+    PG.connect dbname: 'bookmark_manager'
+  end
 
 end
