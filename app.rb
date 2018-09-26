@@ -1,10 +1,14 @@
 require 'sinatra/base'
+require 'sinatra/flash'
 require_relative './lib/bookmark'
+
 
 class BookmarkManager < Sinatra::Base
   enable :sessions
+  register Sinatra::Flash
 
   get '/' do
+    flash[:notice] = "Hooray, Flash is working!"
     #form - add bookmarks and view bookmarks
     erb :hello
   end
@@ -19,8 +23,15 @@ class BookmarkManager < Sinatra::Base
   end
 
   post '/adder' do
-    Bookmark.create(params[:bookmark])
-    redirect '/bookmarks'
+    if Bookmark.valid?(params[:bookmark]) == false
+      flash[:info] = "Info: Invalid URL"
+      flash[:warning] = "Warning: Invalid URL"
+      flash[:fatal] = "Fatal: Invalid URL"
+      redirect '/add_bookmarks'
+    else
+      Bookmark.create(params[:bookmark])
+      redirect '/bookmarks'
+    end
   end
 
   get '/delete_bookmarks' do

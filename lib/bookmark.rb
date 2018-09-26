@@ -1,4 +1,5 @@
 require 'pg'
+require 'uri'
 
 class Bookmark
 
@@ -37,6 +38,12 @@ class Bookmark
 
     string = "DELETE FROM bookmarks WHERE url = '" + url + "';"
     con.exec(string)
-
   end
+
+  def self.valid?(url)
+    uri = URI.parse url
+    uri.kind_of? URI::HTTP || uri.kind_of? URI::HTTPS
+  end
+
+
 end
