@@ -27,7 +27,7 @@ class BookmarkManager < Sinatra::Base
       flash[:fatal] = "Fatal: Invalid URL"
       redirect '/add_bookmarks'
     else
-      Bookmark.create(params[:bookmark])
+      Bookmark.create(params[:title], params[:bookmark])
       redirect '/bookmarks'
     end
   end

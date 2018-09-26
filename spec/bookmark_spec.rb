@@ -5,33 +5,31 @@ describe Bookmark do
     it "should return an Array of Bookmark instances" do
       connection = PG.connect(dbname: 'bookmark_manager_test')
 
-      connection.exec("INSERT INTO bookmarks (url) VALUES ('http://www.makersacademy.com');")
-      connection.exec("INSERT INTO bookmarks (url) VALUES ('http://www.google.com');")
-      connection.exec("INSERT INTO bookmarks (url) VALUES ('http://www.destroyallsoftware.com');")
+      connection.exec("INSERT INTO bookmarks (title, url) VALUES ('MA', 'http://www.makersacademy.com');")
+      connection.exec("INSERT INTO bookmarks (title, url) VALUES ('Google', 'http://www.google.com');")
 
-      expect(Bookmark.all).to include "http://www.makersacademy.com"
-      expect(Bookmark.all).to include "http://www.google.com"
-      expect(Bookmark.all).to include "http://www.destroyallsoftware.com"
+      expect(Bookmark.all).to include({:title=>"MA", :url=>"http://www.makersacademy.com"})
+      expect(Bookmark.all).to include({:title=>"Google", :url=>"http://www.google.com"})
     end
   end
 
   describe ".create" do
     it "should add a new bookmark to database" do
-      Bookmark.create("www.imgur.com")
+      Bookmark.create('Imgur', "www.imgur.com")
 
-      expect(Bookmark.all).to include "www.imgur.com"
+      expect(Bookmark.all).to include({:title=>"Imgur", :url=>"www.imgur.com"})
     end
   end
 
   describe ".delete" do
     it "should add a new bookmark to database" do
-      Bookmark.create("www.imgur.com")
+      Bookmark.create('Imgur', "www.imgur.com")
 
-      expect(Bookmark.all).to include "www.imgur.com"
+      expect(Bookmark.all).to include({:title=>"Imgur", :url=>"www.imgur.com"})
 
       Bookmark.delete("www.imgur.com")
 
-      expect(Bookmark.all).not_to include "www.imgur.com"
+      expect(Bookmark.all).not_to include({:title=>"Imgur", :url=>"www.imgur.com"})
 
     end
   end

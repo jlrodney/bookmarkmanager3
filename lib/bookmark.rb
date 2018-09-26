@@ -7,12 +7,12 @@ class Bookmark
     table = connect.exec "SELECT * FROM bookmarks"
 
     table.map do |row|
-      row['url']
+      {title: row['title'], url: row['url']}
     end
   end
 
-  def self.create(url)
-    string = "INSERT INTO bookmarks (url) VALUES ('" + url + "');"
+  def self.create(title, url)
+    string = "INSERT INTO bookmarks (title, url) VALUES ('" + title + "', '" + url + "');"
     connect.exec(string)
   end
 
@@ -31,7 +31,7 @@ class Bookmark
   end
 
   def self.connect
-    if ENV['ENVIRONMENT'] = 'test'
+    if ENV['ENVIRONMENT'] == 'test'
       return PG.connect dbname: 'bookmark_manager_test'
     end
     PG.connect dbname: 'bookmark_manager'
