@@ -24,8 +24,6 @@ class BookmarkManager < Sinatra::Base
 
   post '/adder' do
     if Bookmark.valid?(params[:bookmark]) == false
-      flash[:info] = "Info: Invalid URL"
-      flash[:warning] = "Warning: Invalid URL"
       flash[:fatal] = "Fatal: Invalid URL"
       redirect '/add_bookmarks'
     else

@@ -49,16 +49,14 @@ describe Bookmark do
     end
     context 'invalid url' do
       it 'should return false' do
+        expect(Bookmark.valid?('www.bbc.co.uk')).to be false
       end
     end
-    context '' do
+    context 'invalid url' do
+      it 'should return false' do
+        expect(Bookmark.valid?('hello')).to be false
+      end
     end
-    context '' do
-    end
-    context '' do
-    end
-    context '' do
-    end
-  end
+
 
 end
