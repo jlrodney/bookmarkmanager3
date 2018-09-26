@@ -2,6 +2,7 @@ require 'sinatra/base'
 require_relative './lib/bookmark'
 
 class BookmarkManager < Sinatra::Base
+  enable :sessions
 
   get '/' do
     #form - add bookmarks and view bookmarks
