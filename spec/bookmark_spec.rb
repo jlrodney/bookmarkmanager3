@@ -1,7 +1,7 @@
 require './lib/bookmark'
 
 describe Bookmark do
-  context ".all" do
+  describe ".all" do
     it "should return an Array of Bookmark instances" do
       connection = PG.connect(dbname: 'bookmark_manager_test')
 
@@ -15,7 +15,7 @@ describe Bookmark do
     end
   end
 
-  context ".create" do
+  describe ".create" do
     it "should add a new bookmark to database" do
       Bookmark.create("www.imgur.com")
 
@@ -23,7 +23,7 @@ describe Bookmark do
     end
   end
 
-  context ".create" do
+  describe ".delete" do
     it "should add a new bookmark to database" do
       Bookmark.create("www.imgur.com")
 
@@ -33,6 +33,31 @@ describe Bookmark do
 
       expect(Bookmark.all).not_to include "www.imgur.com"
 
+    end
+  end
+
+  describe '.valid' do
+    context 'valid http url' do
+      it 'should return true' do
+        expect(Bookmark.valid?('http://www.bbc.co.uk')).to be true
+      end
+    end
+    context 'valid https url' do
+      it 'should return true' do
+        expect(Bookmark.valid?('https://www.bbc.co.uk')).to be true
+      end
+    end
+    context 'invalid url' do
+      it 'should return false' do
+      end
+    end
+    context '' do
+    end
+    context '' do
+    end
+    context '' do
+    end
+    context '' do
     end
   end
 

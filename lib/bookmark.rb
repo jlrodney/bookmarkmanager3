@@ -42,7 +42,11 @@ class Bookmark
 
   def self.valid?(url)
     uri = URI.parse url
-    uri.kind_of? URI::HTTP || uri.kind_of? URI::HTTPS
+    uri.kind_of? URI::HTTP
+  rescue URI::InvalidURIError
+    uri.kind_of? URI::HTTPS
+  rescue URI::InvalidURIError
+    false
   end
 
 
