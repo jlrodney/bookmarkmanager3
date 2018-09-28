@@ -1,14 +1,18 @@
-feature 'add bookmark' do
-  scenario 'should let user add bookmarks' do
-    visit("/add_bookmarks")
-    expect(page).to have_button ('Add!')
+feature 'Adding a new bookmark' do
+  scenario 'A user can add a bookmark to Bookmark Manager' do
+    visit('/add_bookmarks')
+    fill_in('url', with: 'http://www.testbookmark.com')
+    fill_in('title', with: 'Test Bookmark')
+    click_button('Submit')
+
+    expect(page).to have_link('Test Bookmark', href: 'http://www.testbookmark.com')
   end
 
-  scenario 'should redirect to bookmarks page after submission ' do
+  scenario 'A user cannot add an invalid bookmark' do
     visit('/add_bookmarks')
-    fill_in :title, with: 'Imgur'
-    fill_in :bookmark, with: 'http://www.imgur.com'
-    click_button 'Add!'
-    expect(page).to have_content('Imgur')
+    fill_in('url', with: 'not a bookmark')
+    click_button('Submit')
+
+    expect(page).to have_content 'Please submit a valid URL'
   end
 end

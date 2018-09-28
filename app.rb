@@ -1,5 +1,6 @@
 require 'sinatra/base'
 require 'sinatra/flash'
+require 'uri'
 require_relative './lib/bookmark'
 
 
@@ -23,21 +24,25 @@ class BookmarkManager < Sinatra::Base
   end
 
   post '/adder' do
-    if Bookmark.valid?(params[:bookmark]) == false
-      flash[:fatal] = "Fatal: Invalid URL"
-      redirect '/add_bookmarks'
-    else
-      Bookmark.create(params[:title], params[:bookmark])
-      redirect '/bookmarks'
-    end
+    flash[:notice] = "Please submit a valid URL" unless Bookmark.create(url: params[:url], title: params[:title])
+    redirect '/bookmarks'
   end
+  # post '/adder' do
+  #   if Bookmark.valid?(url: params[:url]) == false
+  #     flash[:fatal] = "Fatal: Invalid URL"
+  #     redirect '/add_bookmarks'
+  #   else
+  #     Bookmark.create(title: params[:title], url: params[:url])
+  #     redirect '/bookmarks'
+  #   end
+  # end
 
   get '/delete_bookmarks' do
     erb :delete_bookmark
   end
 
   post '/deleter' do
-    Bookmark.delete(params[:url])
+    Bookmark.delete(url: params[:url])
     redirect '/bookmarks'
   end
 

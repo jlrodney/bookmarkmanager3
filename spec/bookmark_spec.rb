@@ -2,58 +2,50 @@ require './lib/bookmark'
 
 describe Bookmark do
   describe ".all" do
-    it "should return an Array of Bookmark instances" do
+    it "should returns a list of bookmarks" do
       connection = PG.connect(dbname: 'bookmark_manager_test')
+      Bookmark.create(url: "http://www.makersacademy.com", title: "Makers Academy")
+      Bookmark.create(url: "http://www.destroyallsoftware.com", title: "Destroy All Software")
+      Bookmark.create(url: "http://www.google.com", title: "Google")
 
-      connection.exec("INSERT INTO bookmarks (title, url) VALUES ('MA', 'http://www.makersacademy.com');")
-      connection.exec("INSERT INTO bookmarks (title, url) VALUES ('Google', 'http://www.google.com');")
+      bookmarks = Bookmark.all
+      bookmark = bookmarks.first
 
-      expect(Bookmark.all).to include({:title=>"MA", :url=>"http://www.makersacademy.com"})
-      expect(Bookmark.all).to include({:title=>"Google", :url=>"http://www.google.com"})
+      expect(bookmarks.length).to eq 3
+      expect(bookmark).to be_a Bookmark
+      expect(bookmark).to respond_to(:id)
+      expect(bookmark.title).to eq 'Makers Academy'
+      expect(bookmark.url).to eq 'http://www.makersacademy.com'
     end
   end
 
-  describe ".create" do
-    it "should add a new bookmark to database" do
-      Bookmark.create('Imgur', "www.imgur.com")
 
-      expect(Bookmark.all).to include({:title=>"Imgur", :url=>"www.imgur.com"})
+  # describe ".delete" do
+  #   it "should add a new bookmark to database" do
+  #     Bookmark.create('Imgur', "www.imgur.com")
+  #
+  #     expect(Bookmark.all).to include({:title=>"Imgur", :url=>"www.imgur.com"})
+  #
+  #     Bookmark.delete("www.imgur.com")
+  #
+  #     expect(Bookmark.all).not_to include({:title=>"Imgur", :url=>"www.imgur.com"})
+  #
+  #   end
+  # end
+
+  describe '.create' do
+    it 'creates a new bookmark' do
+      bookmark = Bookmark.create(url: 'http://www.testbookmark.com', title: 'Test Bookmark')
+
+      expect(bookmark).to be_a Bookmark
+      expect(bookmark).to respond_to(:id)
+      expect(bookmark.title).to eq 'Test Bookmark'
     end
-  end
 
-  describe ".delete" do
-    it "should add a new bookmark to database" do
-      Bookmark.create('Imgur', "www.imgur.com")
+    it 'validates the URL' do
+      bookmark = Bookmark.create(url: 'not a valid url', title: 'not url')
 
-      expect(Bookmark.all).to include({:title=>"Imgur", :url=>"www.imgur.com"})
-
-      Bookmark.delete("www.imgur.com")
-
-      expect(Bookmark.all).not_to include({:title=>"Imgur", :url=>"www.imgur.com"})
-
-    end
-  end
-
-  describe '.valid' do
-    context 'valid http url' do
-      it 'should return true' do
-        expect(Bookmark.valid?('http://www.bbc.co.uk')).to be true
-      end
-    end
-    context 'valid https url' do
-      it 'should return true' do
-        expect(Bookmark.valid?('https://www.bbc.co.uk')).to be true
-      end
-    end
-    context 'invalid url' do
-      it 'should return false' do
-        expect(Bookmark.valid?('www.bbc.co.uk')).to be false
-      end
-    end
-    context 'invalid url' do
-      it 'should return false' do
-        expect(Bookmark.valid?('hello')).to be false
-      end
+      expect(bookmark).not_to be_a Bookmark
     end
   end
 
